@@ -195,7 +195,7 @@
 
         <div class="container">
             <header class="app-header">
-                <img id="appIcon" src="" class="app-icon" onerror="this.src='assets/default-icon.png'">
+                <img id="appIcon" src="" class="app-icon" onerror="this.src='assets/icon.png'">
                 <div class="app-title">
                     <div class="app-meta">
                         <span id="appCategory"></span>
@@ -251,7 +251,7 @@
                 document.getElementById('appCategory').textContent = app.category;
                 document.getElementById('appVersion').textContent = `v${app.version || '1.0'}`;
                 document.getElementById('appDesc').textContent = app.longDescription || app.description;
-                document.getElementById('appIcon').src = app.icon || 'assets/default-icon.png';
+                document.getElementById('appIcon').src = app.icon || 'assets/icon.png';
 
                 if (app.banner) {
                     document.getElementById('appBanner').style.backgroundImage = `url('${app.banner}')`;

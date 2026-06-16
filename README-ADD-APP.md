@@ -53,4 +53,4 @@ node scripts/generate-manifest.js
 - في حال فقدان أي صورة، يظهر **Placeholder** احترافي تلقائياً.
 
 ---
-**تم التطوير بواسطة Mopota Engineering**
+**تم التطوير بواسطة Mohamed Taha Engineering**
