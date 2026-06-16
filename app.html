@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحميل التطبيق | M-Store</title>
+    <title>تحميل التطبيق | H-Store</title>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
@@ -231,7 +231,7 @@
     </div>
 
     <script>
-        const firebaseConfig = { databaseURL: "https://M-Store-default-rtdb.firebaseio.com" };
+        const firebaseConfig = { databaseURL: "https://h-store-default-rtdb.firebaseio.com" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
@@ -241,20 +241,27 @@
 
             try {
                 const res = await fetch('data/apps-manifest.json');
+                if (!res.ok) throw new Error('Manifest not found');
                 const manifest = await res.json();
                 const app = manifest.find(a => a.id === appId);
                 if (!app) throw 'App not found';
 
                 // Render UI
-                document.title = `${app.name} | M-Store`;
+                document.title = `${app.name} | H-Store`;
                 document.getElementById('appName').textContent = app.name;
                 document.getElementById('appCategory').textContent = app.category;
                 document.getElementById('appVersion').textContent = `v${app.version || '1.0'}`;
                 document.getElementById('appDesc').textContent = app.longDescription || app.description;
-                document.getElementById('appIcon').src = app.icon || 'assets/icon.png';
+
+                const icon = app.icon || 'assets/defaults/default-app-icon.png';
+                document.getElementById('appIcon').src = icon;
+                document.getElementById('appIcon').onerror = function() { this.src = 'assets/defaults/default-app-icon.png'; };
 
                 if (app.banner) {
                     document.getElementById('appBanner').style.backgroundImage = `url('${app.banner}')`;
+                    document.getElementById('appBanner').style.backgroundSize = 'cover';
+                } else {
+                    document.getElementById('appBanner').style.backgroundImage = `url('assets/defaults/default-banner.jpg')`;
                 }
 
                 document.getElementById('statRating').textContent = app.rating || '5.0';
@@ -268,6 +275,7 @@
                         const img = document.createElement('img');
                         img.src = s;
                         img.loading = 'lazy';
+                        img.onerror = function() { this.style.display = 'none'; };
                         screenBox.appendChild(img);
                     });
                 } else {

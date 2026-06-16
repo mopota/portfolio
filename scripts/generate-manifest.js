@@ -3,16 +3,49 @@ const path = require('path');
 
 const appsDir = path.join(__dirname, '../apps');
 const outputFile = path.join(__dirname, '../data/apps-manifest.json');
-
 const imageExtensions = ['.png', '.jpg', '.jpeg', '.webp', '.svg'];
 
-function findImage(dir, baseName) {
-    for (const ext of imageExtensions) {
-        const file = `${baseName}${ext}`;
-        if (fs.existsSync(path.join(dir, file))) {
-            return file;
+/**
+ * Smart Asset Discovery
+ */
+function findAsset(appPath, folder, baseName) {
+    const searchLocations = [
+        appPath,                    // Root of app folder
+        path.join(appPath, 'assets') // assets/ subfolder
+    ];
+
+    // 1. Try exact matches with extensions
+    for (const dir of searchLocations) {
+        if (!fs.existsSync(dir)) continue;
+        for (const ext of imageExtensions) {
+            const file = `${baseName}${ext}`;
+            const fullPath = path.join(dir, file);
+            if (fs.existsSync(fullPath)) {
+                const relativePath = path.relative(path.join(__dirname, '..'), fullPath).replace(/\\/g, '/');
+                console.log(`[DEBUG] Found ${baseName}: ${relativePath}`);
+                return relativePath;
+            }
         }
     }
+
+    // 2. Fallback: Search for partial matches (icon, logo, etc) if looking for 'icon'
+    if (baseName === 'icon') {
+        const keywords = ['icon', 'logo', 'app-icon'];
+        for (const dir of searchLocations) {
+            if (!fs.existsSync(dir)) continue;
+            const files = fs.readdirSync(dir);
+            for (const file of files) {
+                const lowerFile = file.toLowerCase();
+                if (keywords.some(k => lowerFile.includes(k)) && imageExtensions.includes(path.extname(lowerFile))) {
+                    const relativePath = path.relative(path.join(__dirname, '..'), path.join(dir, file)).replace(/\\/g, '/');
+                    console.log(`[DEBUG] Smart Found ${baseName} (partial match): ${relativePath}`);
+                    return relativePath;
+                }
+            }
+        }
+    }
+
+    console.warn(`[WARN] Missing ${baseName} for app in: ${appPath}`);
     return null;
 }
 
@@ -33,37 +66,45 @@ if (fs.existsSync(appsDir)) {
         if (fs.lstatSync(appPath).isDirectory()) {
             const configPath = path.join(appPath, 'app.json');
             if (fs.existsSync(configPath)) {
-                const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+                try {
+                    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
-                // Auto Detect Assets
-                const icon = findImage(appPath, 'icon');
-                const banner = findImage(appPath, 'banner');
-                const cover = findImage(appPath, 'cover');
+                    // Smart Discovery for Icon, Banner, Cover
+                    const icon = findAsset(appPath, folder, 'icon');
+                    const banner = findAsset(appPath, folder, 'banner');
+                    const cover = findAsset(appPath, folder, 'cover');
 
-                const screenshots = getImagesInDir(path.join(appPath, 'screenshots'))
-                    .map(img => `screenshots/${img}`);
+                    const screenshots = getImagesInDir(path.join(appPath, 'screenshots'))
+                        .map(img => `apps/${folder}/screenshots/${img}`);
 
-                const assets = getImagesInDir(path.join(appPath, 'assets'))
-                    .map(img => `assets/${img}`);
+                    const assets = getImagesInDir(path.join(appPath, 'assets'))
+                        .map(img => `apps/${folder}/assets/${img}`);
 
-                manifest.push({
-                    ...config,
-                    folder: folder,
-                    appFile: `apps/${folder}/app.json`,
-                    icon: icon ? `apps/${folder}/${icon}` : null,
-                    banner: banner ? `apps/${folder}/${banner}` : null,
-                    cover: cover ? `apps/${folder}/${cover}` : null,
-                    screenshots: screenshots.map(s => `apps/${folder}/${s}`),
-                    assets: assets.map(a => `apps/${folder}/${a}`),
-                    lastUpdated: fs.statSync(configPath).mtime
-                });
+                    manifest.push({
+                        ...config,
+                        id: config.id || folder,
+                        folder: folder,
+                        appFile: `apps/${folder}/app.json`,
+                        icon: icon,
+                        banner: banner,
+                        cover: cover,
+                        screenshots: screenshots,
+                        assets: assets,
+                        lastUpdated: fs.statSync(configPath).mtime
+                    });
+                } catch (e) {
+                    console.error(`[ERROR] Parsing app.json in ${folder}:`, e.message);
+                }
             }
         }
     });
 }
 
-// Sort by date (Newest first)
 manifest.sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
 
+// Ensure data directory exists
+const dataDir = path.dirname(outputFile);
+if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+
 fs.writeFileSync(outputFile, JSON.stringify(manifest, null, 2));
-console.log(`✅ Manifest generated with ${manifest.length} apps.`);
+console.log(`\n✅ Autonomous Manifest generated with ${manifest.length} apps.`);

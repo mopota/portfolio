@@ -8,15 +8,5 @@
     "featured": true,
     "new": true,
     "appFile": "apps/hisn-al-muslim/app.json"
-  },
-  {
-    "id": "quran-pro",
-    "name": "القرآن برو",
-    "shortDescription": "تجربة قراءة واستماع فريدة للقرآن الكريم.",
-    "category": "Islamic",
-    "icon": "📖",
-    "featured": false,
-    "new": false,
-    "appFile": "apps/quran-pro/app.json"
   }
 ]

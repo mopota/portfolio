@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M-Store | متجر تطبيقات Mohamed Taha الاحترافي</title>
+    <title>H-Store | متجر تطبيقات Mohamed Taha الاحترافي</title>
 
     <!-- Firebase SDK (v9 compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -359,7 +359,7 @@
     <script>
         // Firebase Config (Replace with your actual config)
         const firebaseConfig = {
-            databaseURL: "https://M-Store-default-rtdb.firebaseio.com"
+            databaseURL: "https://h-store-default-rtdb.firebaseio.com"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -373,26 +373,30 @@
             async init() {
                 try {
                     const res = await fetch('data/apps-manifest.json');
+                    if (!res.ok) throw new Error('Failed to load manifest');
                     this.apps = await res.json();
 
                     this.renderLatest();
                     this.loadStats();
                 } catch (e) {
                     console.error("Manifest fail", e);
+                    document.getElementById('latestGrid').innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--gold);">عذراً، جاري تحديث البيانات... يرجى المحاولة لاحقاً.</p>';
                 }
             }
 
             renderLatest() {
                 const grid = document.getElementById('latestGrid');
+                if (this.apps.length === 0) return;
                 grid.innerHTML = this.apps.map(app => this.createCard(app)).join('');
                 document.getElementById('totalApps').textContent = this.apps.length;
             }
 
             createCard(app) {
+                const icon = app.icon || 'assets/defaults/default-app-icon.png';
                 return `
                     <a href="app.html?id=${app.id}" class="app-card">
                         ${app.featured ? '<span class="badge">مميز</span>' : ''}
-                        <img src="${app.icon || 'assets/icon.png'}" class="card-icon" onerror="this.src='assets/icon.png'">
+                        <img src="${icon}" class="card-icon" onerror="this.src='assets/defaults/default-app-icon.png'">
                         <div class="card-name">${app.name}</div>
                         <div class="card-desc">${app.shortDescription || ''}</div>
                         <div class="card-stats">
