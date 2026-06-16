@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الشروط والأحكام - تطبيق حصن المسلم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1a5c3a;
+            --primary-light: #2d7a52;
+            --primary-dark: #0f3d26;
+            --accent-gold: #c9a84c;
+            --accent-gold-light: #e0c46e;
+            --bg-cream: #faf8f3;
+            --bg-white: #ffffff;
+            --text-dark: #1a1a1a;
+            --text-medium: #4a4a4a;
+            --text-light: #7a7a7a;
+            --border-light: #e8e4dc;
+            --shadow-soft: 0 4px 20px rgba(26, 92, 58, 0.08);
+            --shadow-medium: 0 8px 30px rgba(26, 92, 58, 0.12);
+            --gradient-primary: linear-gradient(135deg, #1a5c3a 0%, #2d7a52 50%, #1a5c3a 100%);
+            --gradient-gold: linear-gradient(135deg, #c9a84c 0%, #e0c46e 50%, #c9a84c 100%);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Decorative Pattern Overlay */
+        .pattern-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30L30 0z' fill='none' stroke='%231a5c3a' stroke-width='1'/%3E%3C/svg%3E");
+            background-size: 40px 40px;
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            background: var(--gradient-primary);
+            padding: 60px 20px 80px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: var(--bg-cream);
+            clip-path: ellipse(60% 100% at 50% 100%);
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .logo-icon {
+            font-size: 48px;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.85);
+            font-weight: 300;
+        }
+
+        .header .divider {
+            width: 80px;
+            height: 3px;
+            background: var(--gradient-gold);
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: -30px auto 60px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Last Updated Badge */
+        .last-updated {
+            background: var(--bg-white);
+            border-radius: 50px;
+            padding: 12px 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            border: 1px solid var(--border-light);
+        }
+
+        .last-updated i {
+            color: var(--accent-gold);
+        }
+
+        /* Section Cards */
+        .section-card {
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 35px 40px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-light);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 0 20px 20px 0;
+            transition: width 0.4s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .section-card:hover::before {
+            width: 8px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .section-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(26, 92, 58, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .section-card:hover .section-number {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .section-content {
+            color: var(--text-medium);
+            font-size: 1rem;
+            line-height: 2;
+            padding-right: 65px;
+        }
+
+        .section-content p {
+            text-align: justify;
+        }
+
+        /* Decorative Elements */
+        .ornament {
+            text-align: center;
+            margin: 40px 0;
+            color: var(--accent-gold);
+            font-size: 24px;
+            opacity: 0.6;
+        }
+
+        .ornament i {
+            margin: 0 10px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gradient-primary);
+            padding: 50px 20px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: var(--bg-cream);
+            clip-path: ellipse(60% 100% at 50% 0%);
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer h3 {
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .footer p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        .footer-links a i {
+            margin-left: 8px;
+            color: var(--accent-gold);
+        }
+
+        .copyright {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
+        }
+
+        /* Scroll Animation */
+        .section-card {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .section-card:nth-child(1) { animation-delay: 0.1s; }
+        .section-card:nth-child(2) { animation-delay: 0.2s; }
+        .section-card:nth-child(3) { animation-delay: 0.3s; }
+        .section-card:nth-child(4) { animation-delay: 0.4s; }
+        .section-card:nth-child(5) { animation-delay: 0.5s; }
+        .section-card:nth-child(6) { animation-delay: 0.6s; }
+        .section-card:nth-child(7) { animation-delay: 0.7s; }
+        .section-card:nth-child(8) { animation-delay: 0.8s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-card {
+                padding: 25px 20px;
+            }
+
+            .section-content {
+                padding-right: 0;
+            }
+
+            .section-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .section-number {
+                margin: 0 auto;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-cream);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="pattern-overlay"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-icon">
+                <i class="fas fa-mosque"></i>
+            </div>
+            <h1>الشروط والأحكام</h1>
+            <div class="divider"></div>
+            <p class="subtitle">تطبيق حصن المسلم - حماية وخدمة المسلم في حياته اليومية</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div style="text-align: center;">
+            <div class="last-updated">
+                <i class="fas fa-calendar-alt"></i>
+                <span>آخر تحديث: 12 يونيو 2026</span>
+            </div>
+        </div>
+
+        <!-- Section 1: Privacy Policy -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <h2 class="section-title">سياسة الخصوصية</h2>
+            </div>
+            <div class="section-content">
+                <p>نحن في تطبيق حصن نلتزم بأقصى درجات الحماية لخصوصيتك. يهدف هذا التطبيق لخدمة المسلم دون تتبع أو جمع بيانات شخصية حساسة دون داعٍ. جميع البيانات التي يتم إدخالها تُخزن محلياً على جهازك لضمان أفضل تجربة مستخدم.</p>
+            </div>
+        </div>
+
+        <!-- Section 2: Terms of Use -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <h2 class="section-title">شروط الاستخدام</h2>
+            </div>
+            <div class="section-content">
+                <p>باستخدامك لتطبيق حصن، فإنك توافق على الالتزام بالشروط والأحكام المذكورة هنا. التطبيق متاح للاستخدام الشخصي وغير التجاري، ويهدف لتسهيل الوصول للأذكار والخدمات الإسلامية.</p>
+            </div>
+        </div>
+
+        <!-- Section 3: Data Collection -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <h2 class="section-title">جمع البيانات</h2>
+            </div>
+            <div class="section-content">
+                <p>التطبيق يطلب صلاحية الموقع الجغرافي فقط لحساب مواقيت الصلاة واتجاه القبلة بدقة. كما يتم طلب صلاحية الوصول للملفات في حال رغبتك في رفع صورة شخصية للملف الشخصي. نحن لا نقوم ببيع أو مشاركة بياناتك مع أي جهات خارجية.</p>
+            </div>
+        </div>
+
+        <!-- Section 4: Cookies -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <h2 class="section-title">ملفات تعريف الارتباط</h2>
+            </div>
+            <div class="section-content">
+                <p>لا يستخدم التطبيق ملفات تعريف الارتباط (Cookies) للتتبع، ولكن قد يتم استخدام تقنيات تخزين محلية لحفظ إعداداتك وتفضيلاتك داخل التطبيق فقط.</p>
+            </div>
+        </div>
+
+        <!-- Section 5: User Responsibility -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-number">5</div>
+                <h2 class="section-title">مسؤولية المستخدم</h2>
+            </div>
+            <div class="section-content">
+                <p>المستخدم مسؤول عن الحفاظ على أمان جهازه والبيانات المخزنة عليه. يُنصح بعدم مشاركة البيانات الحساسة أو التعديل على ملفات النظام التي قد تؤثر على عمل التطبيق.</p>
+            </div>
+        </div>
+
+        <!-- Section 6: Liability Limits -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-number">6</div>
+                <h2 class="section-title">حدود المسؤولية</h2>
+            </div>
+            <div class="section-content">
+                <p>نحن نبذل قصارى جهدنا لضمان دقة مواقيت الصلاة والبيانات الدينية، إلا أننا لا نتحمل المسؤولية عن أي أخطاء ناتجة عن خلل في الحسابات الفلكية أو خدمات تحديد الموقع. يُنصح دائماً بمراجعة المصادر الرسمية.</p>
+            </div>
+        </div>
+
+        <!-- Section 7: Support -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-number">7</div>
+                <h2 class="section-title">التواصل والدعم</h2>
+            </div>
+            <div class="section-content">
+                <p>إذا كان لديك أي استفسار حول سياسة الخصوصية أو واجهت مشكلة في التطبيق، يمكنك التواصل معنا عبر البريد الإلكتروني المخصص للدعم الفني الظاهر في صفحة "عن التطبيق".</p>
+            </div>
+        </div>
+
+        <!-- Section 8: Policy Updates -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-number">8</div>
+                <h2 class="section-title">تحديثات السياسة</h2>
+            </div>
+            <div class="section-content">
+                <p>نحتفظ بالحق في تحديث هذه السياسة من وقت لآخر لمواكبة التطورات التقنية والقانونية. سيتم إخطار المستخدمين بأي تغييرات جوهرية عبر تحديثات التطبيق.</p>
+            </div>
+        </div>
+
+        <div class="ornament">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-star"></i>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3>تطبيق حصن المسلم</h3>
+            <p>حماية وخدمة المسلم في حياته اليومية من خلال الأذكار والأدعية والخدمات الإسلامية</p>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-envelope"></i> الدعم الفني</a>
+                <a href="#"><i class="fas fa-info-circle"></i> عن التطبيق</a>
+                <a href="#"><i class="fas fa-share-alt"></i> مشاركة التطبيق</a>
+            </div>
+            <div class="copyright">
+                <p>جميع الحقوق محفوظة © 2026 - تطبيق حصن المسلم</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
