@@ -1,0 +1,21 @@
+[
+  {
+    "id": "hisn-al-muslim",
+    "title": "حصن المسلم",
+    "shortDescription": "تطبيق الأذكار والقرآن الكريم",
+    "description": "تطبيق حصن المسلم هو رفيقك اليومي للأذكار والأدعية المستمدة من القرآن والسنة. يتميز بتصميم عصري وسهل الاستخدام، مع إمكانية الوصول السريع للأذكار وتخصيص تجربة القراءة.",
+    "version": "3.1.0",
+    "category": "Islamic",
+    "downloadUrl": "https://play.google.com/store",
+    "githubUrl": "https://github.com/mohamed-taha-07",
+    "technologies": [
+      "Flutter",
+      "Firebase",
+      "SQLite",
+      "Provider"
+    ],
+    "featured": true,
+    "icon": null,
+    "screenshots": []
+  }
+]
