@@ -25,8 +25,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Generate Manifest
-        run: npm run generate
+      - name: Generate Manifest (Production Mode)
+        run: NODE_ENV=production node scripts/generate-manifest.js
 
       - name: Build with Next.js
         run: npx next build

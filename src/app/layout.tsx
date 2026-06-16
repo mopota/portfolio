@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Tajawal } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import { getAssetPath } from '@/lib/utils'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const tajawal = Tajawal({
@@ -26,7 +27,10 @@ export default function RootLayout({
       <body className={`${inter.variable} ${tajawal.variable} font-sans bg-background text-foreground selection:bg-primary/30`}>
         <ThemeProvider attribute="class" defaultTheme="dark">
           <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(17,24,39,1)_0%,rgba(0,0,0,1)_100%)] -z-10" />
-          <div className="fixed inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] -z-10 opacity-20" />
+          <div
+            className="fixed inset-0 bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] -z-10 opacity-20"
+            style={{ backgroundImage: `url(${getAssetPath('/grid.svg')})` }}
+          />
           <main className="min-h-screen relative">
             {children}
           </main>
