@@ -3,11 +3,16 @@ name: Deploy Portfolio
 on:
   push:
     branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -16,20 +21,59 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Detect package-lock.json
+        id: detect-lock
+        run: |
+          if [ -f "package-lock.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
+      - name: Validate package.json
+        run: |
+          if [ ! -f "package.json" ]; then
+            echo "Error: package.json not found."
+            exit 1
+          fi
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: 'npm'
+          # Only enable cache if package-lock.json exists to prevent setup-node from failing
+          cache: ${{ steps.detect-lock.outputs.exists == 'true' && 'npm' || '' }}
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
       - name: Install dependencies
-        run: npm install
-
-      - name: Generate Manifest (Production Mode)
-        run: NODE_ENV=production node scripts/generate-manifest.js
+        run: |
+          if [ "${{ steps.detect-lock.outputs.exists }}" == "true" ]; then
+            echo "package-lock.json found. Running npm ci..."
+            npm ci
+          else
+            echo "package-lock.json not found. Running npm install..."
+            npm install
+          fi
 
       - name: Build with Next.js
-        run: npx next build
+        env:
+          NODE_ENV: production
+        run: |
+          npm run build
+
+      - name: Validate static export
+        run: |
+          if [ ! -d "out" ]; then
+            echo "Error: Static export directory 'out' not found."
+            exit 1
+          fi
+          if [ ! -f "out/index.html" ]; then
+            echo "Warning: index.html not found in 'out' directory."
+          fi
+          echo "Static export validated."
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
