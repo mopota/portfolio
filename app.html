@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحميل التطبيق | H-Store</title>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #0D9488;
+            --dark-bg: #020617;
+            --dark-second: #121826;
+            --gold: #F59E0B;
+            --text-main: #F8FAFC;
+            --text-dim: #94A3B8;
+            --glass: rgba(15, 23, 42, 0.7);
+            --border: rgba(255, 255, 255, 0.08);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --max-width: 1200px;
+            --container-padding: 5%;
+        }
+
+        body {
+            font-family: 'Noto Kufi Arabic', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            line-height: 1.7;
+            margin: 0;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        nav {
+            padding: 1.2rem var(--container-padding);
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .back-btn { color: var(--text-main); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+        .app-banner {
+            width: 100%;
+            height: clamp(250px, 40vh, 450px);
+            background-size: cover;
+            background-position: center;
+            mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+            background-color: var(--dark-second);
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: -100px auto 100px;
+            padding: 0 var(--container-padding);
+            position: relative;
+        }
+
+        .app-header {
+            display: flex;
+            gap: clamp(20px, 5vw, 40px);
+            align-items: flex-end;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .app-icon {
+            width: clamp(120px, 25vw, 180px);
+            height: clamp(120px, 25vw, 180px);
+            background: var(--dark-second);
+            border-radius: 32px;
+            border: 2px solid var(--border);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .app-title { flex: 1; min-width: 280px; }
+        .app-title h1 { font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 900; margin-bottom: 0.5rem; line-height: 1.2; }
+        .app-meta { color: var(--primary); font-weight: 800; font-size: 1rem; display: flex; gap: 15px; flex-wrap: wrap; }
+
+        .btn-download {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 2rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            width: auto;
+        }
+
+        @media (max-width: 576px) {
+            .app-header { flex-direction: column; align-items: center; text-align: center; margin-top: -60px; }
+            .btn-download { width: 100%; justify-content: center; }
+            .app-meta { justify-content: center; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr) !important; padding: 1.5rem !important; }
+            :root { --container-padding: 1.2rem; }
+            .app-banner { height: 300px; }
+            .container { margin-top: -80px; }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px;
+            margin-bottom: 4rem;
+            background: var(--dark-second);
+            padding: 2rem;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-val { display: block; font-size: clamp(1.2rem, 3vw, 1.6rem); font-weight: 800; color: var(--gold); }
+        .stat-lab { color: var(--text-dim); font-size: 0.75rem; }
+
+        .section-h { font-size: clamp(1.5rem, 4vw, 2rem); margin-bottom: 1.5rem; color: var(--text-main); display: flex; align-items: center; gap: 15px; }
+        .section-h::after { content: ''; height: 2px; flex-grow: 1; background: var(--border); }
+
+        .screenshots-scroll {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            cursor: grab;
+        }
+        .screenshots-scroll::-webkit-scrollbar { display: none; }
+
+        .screenshots-scroll img {
+            height: clamp(350px, 50vh, 500px);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        /* Large Screens Support */
+        @media (min-width: 1920px) {
+            :root { --max-width: 1400px; }
+        }
+
+        @media (min-width: 2560px) {
+            :root { --max-width: 1800px; }
+        }
+
+        .assets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .assets-grid img {
+            width: 100%;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        #loader {
+            position: fixed; inset: 0; background: var(--dark-bg); z-index: 2000;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .app-header { flex-direction: column; align-items: center; text-align: center; margin-top: -60px; }
+            .app-title h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="loader"><i class="fas fa-circle-notch fa-spin fa-3x" style="color: var(--primary);"></i></div>
+
+    <nav><a href="index.html" class="back-btn"><i class="fas fa-arrow-right"></i> العودة للمتجر</a></nav>
+
+    <div id="appUI" style="display: none;">
+        <div id="appBanner" class="app-banner"></div>
+
+        <div class="container">
+            <header class="app-header">
+                <img id="appIcon" src="" class="app-icon" onerror="this.src='assets/default-icon.png'">
+                <div class="app-title">
+                    <div class="app-meta">
+                        <span id="appCategory"></span>
+                        <span id="appVersion"></span>
+                    </div>
+                    <h1 id="appName"></h1>
+                    <button id="downloadBtn" class="btn-download"><i class="fas fa-download"></i> تحميل APK</button>
+                </div>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-item"><span id="statRating" class="stat-val"></span><span class="stat-lab">التقييم</span></div>
+                <div class="stat-item"><span id="statDownloads" class="stat-val">0</span><span class="stat-lab">التحميلات</span></div>
+                <div class="stat-item"><span id="statSize" class="stat-val"></span><span class="stat-lab">الحجم</span></div>
+                <div class="stat-item"><span id="statAndroid" class="stat-val"></span><span class="stat-lab">أندرويد</span></div>
+            </div>
+
+            <section style="margin-bottom: 4rem;">
+                <h2 class="section-h">وصف التطبيق</h2>
+                <p id="appDesc" style="color: var(--text-dim); font-size: 1.1rem; line-height: 1.8;"></p>
+            </section>
+
+            <section id="screenshotsSection" style="margin-bottom: 4rem;">
+                <h2 class="section-h">لقطات الشاشة</h2>
+                <div id="screenshotsBox" class="screenshots-scroll"></div>
+            </section>
+
+            <section id="assetsSection" style="margin-bottom: 4rem; display: none;">
+                <h2 class="section-h">المميزات والمعرض</h2>
+                <div id="assetsBox" class="assets-grid"></div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = { databaseURL: "https://h-store-default-rtdb.firebaseio.com" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        async function initApp() {
+            const appId = new URLSearchParams(window.location.search).get('id');
+            if (!appId) return window.location.href = 'index.html';
+
+            try {
+                const res = await fetch('data/apps-manifest.json');
+                const manifest = await res.json();
+                const app = manifest.find(a => a.id === appId);
+                if (!app) throw 'App not found';
+
+                // Render UI
+                document.title = `${app.name} | H-Store`;
+                document.getElementById('appName').textContent = app.name;
+                document.getElementById('appCategory').textContent = app.category;
+                document.getElementById('appVersion').textContent = `v${app.version || '1.0'}`;
+                document.getElementById('appDesc').textContent = app.longDescription || app.description;
+                document.getElementById('appIcon').src = app.icon || 'assets/default-icon.png';
+
+                if (app.banner) {
+                    document.getElementById('appBanner').style.backgroundImage = `url('${app.banner}')`;
+                }
+
+                document.getElementById('statRating').textContent = app.rating || '5.0';
+                document.getElementById('statSize').textContent = app.size || '-- MB';
+                document.getElementById('statAndroid').textContent = app.android || '8.0+';
+
+                // Screenshots
+                const screenBox = document.getElementById('screenshotsBox');
+                if (app.screenshots && app.screenshots.length > 0) {
+                    app.screenshots.forEach(s => {
+                        const img = document.createElement('img');
+                        img.src = s;
+                        img.loading = 'lazy';
+                        screenBox.appendChild(img);
+                    });
+                } else {
+                    document.getElementById('screenshotsSection').style.display = 'none';
+                }
+
+                // Assets
+                const assetsBox = document.getElementById('assetsBox');
+                if (app.assets && app.assets.length > 0) {
+                    app.assets.forEach(a => {
+                        const img = document.createElement('img');
+                        img.src = a;
+                        img.loading = 'lazy';
+                        assetsBox.appendChild(img);
+                    });
+                    document.getElementById('assetsSection').style.display = 'block';
+                }
+
+                // Download Logic
+                const dlBtn = document.getElementById('downloadBtn');
+                dlBtn.onclick = () => {
+                    db.ref(`apps/${appId}/downloads`).transaction(current => (current || 0) + 1);
+                    window.location.href = app.downloadUrl || '#';
+                };
+
+                // Real-time Downloads
+                db.ref(`apps/${appId}/downloads`).on('value', snap => {
+                    document.getElementById('statDownloads').textContent = (snap.val() || 0).toLocaleString();
+                });
+
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('appUI').style.display = 'block';
+
+            } catch (e) {
+                console.error(e);
+                alert('خطأ في تحميل بيانات التطبيق');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>

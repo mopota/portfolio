@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H-Store | متجر تطبيقات Mopota الاحترافي</title>
+
+    <!-- Firebase SDK (v9 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #0D9488;
+            --primary-glow: rgba(13, 148, 136, 0.3);
+            --dark-bg: #020617;
+            --dark-second: #121826;
+            --gold: #F59E0B;
+            --gold-light: #fbbf24;
+            --text-main: #F8FAFC;
+            --text-dim: #94A3B8;
+            --glass: rgba(15, 23, 42, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --max-width: 1400px;
+            --container-padding: 5%;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Kufi Arabic', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            top: -25vw;
+            right: -25vw;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem var(--container-padding);
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+            padding: 0.8rem 1.5rem;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .mobile-nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.7rem;
+            gap: 4px;
+        }
+
+        .mobile-nav a.active { color: var(--primary); }
+        .mobile-nav i { font-size: 1.2rem; }
+
+        .logo {
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
+            font-weight: 800;
+            color: var(--gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero {
+            padding: clamp(8rem, 15vh, 10rem) var(--container-padding) 4rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 8vw, 4rem);
+            font-weight: 900;
+            background: linear-gradient(to bottom, #fff, var(--text-dim));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        /* App Grid */
+        .section-container { max-width: var(--max-width); margin: 0 auto 5rem; padding: 0 var(--container-padding); }
+        .section-title { font-size: 1.8rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 15px; }
+        .section-title::after { content:''; height: 2px; flex-grow: 1; background: var(--border); }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Responsive Logic */
+        @media (max-width: 576px) {
+            :root { --container-padding: 1.2rem; }
+            .mobile-nav { display: flex; }
+            body { padding-bottom: 70px; }
+            .hero { padding-top: 7rem; }
+            .app-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+            .app-card { border-radius: 20px; }
+            .dev-profile { padding: 2.5rem 1.5rem; flex-direction: column; text-align: center; }
+        }
+
+        @media (min-width: 1200px) {
+            :root { --max-width: 1600px; }
+            .app-grid { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+        }
+
+        @media (min-width: 2560px) {
+            :root { --max-width: 2200px; }
+            .app-grid { grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); }
+        }
+
+        .app-card {
+            background: var(--dark-second);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            will-change: transform;
+        }
+
+        @media (hover: hover) {
+            .app-card:hover {
+                transform: translateY(-10px);
+                border-color: var(--primary);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            }
+        }
+
+        .app-card .badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 800;
+        }
+
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            margin-bottom: 1.2rem;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .card-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .card-desc { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1rem; height: 2.8rem; overflow: hidden; }
+
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--gold);
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        /* Developer & Social Sections */
+        .dev-profile {
+            background: var(--dark-second);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 3rem;
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 5rem;
+        }
+
+        .dev-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            box-shadow: 0 0 30px var(--primary-glow);
+        }
+
+        .dev-info h2 { font-size: 2rem; margin-bottom: 1rem; color: var(--gold); }
+        .dev-info p { color: var(--text-dim); margin-bottom: 1.5rem; max-width: 600px; }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .social-card {
+            background: var(--dark-second);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 24px;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
+        }
+
+        .social-card:hover::before { transform: translateX(100%); }
+
+        .social-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--gold);
+            box-shadow: 0 15px 30px rgba(245, 158, 11, 0.2);
+        }
+
+        .social-card i { font-size: 2rem; color: var(--gold); }
+        .social-card span { font-weight: 700; font-size: 1.1rem; }
+
+        @media (max-width: 768px) {
+            .dev-profile { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+
+    <nav>
+        <a href="index.html" class="logo"><i class="fas fa-box-open"></i> H-<span>Store</span></a>
+    </nav>
+
+    <div class="mobile-nav">
+        <a href="index.html" class="active"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+        <a href="#trendingSection"><i class="fas fa-fire"></i><span>شائع</span></a>
+        <a href="#latestGrid"><i class="fas fa-rocket"></i><span>الأحدث</span></a>
+        <a href="https://t.me/mohamed_taha_07" target="_blank"><i class="fab fa-telegram-plane"></i><span>تواصل</span></a>
+    </div>
+
+    <header class="hero">
+        <h1>عالم التطبيقات المتكامل</h1>
+        <p style="color: var(--text-dim);">استكشف تطبيقات Mopota الحصرية والمفتوحة المصدر</p>
+    </header>
+
+    <!-- Trending Apps -->
+    <div class="section-container" id="trendingSection" style="display: none;">
+        <h2 class="section-title"><i class="fas fa-fire" style="color: var(--gold);"></i> الأكثر تحميلاً</h2>
+        <div class="app-grid" id="trendingGrid"></div>
+    </div>
+
+    <!-- Latest Apps -->
+    <div class="section-container">
+        <h2 class="section-title"><i class="fas fa-rocket"></i> أحدث الإصدارات</h2>
+        <div class="app-grid" id="latestGrid"></div>
+    </div>
+
+    <!-- Developer Section -->
+    <div class="section-container">
+        <div class="dev-profile">
+            <div class="dev-avatar"><i class="fas fa-user-ninja"></i></div>
+            <div class="dev-info">
+                <h2>المطور Mopota</h2>
+                <p>مطور برمجيات مستقل متخصص في تطبيقات الأندرويد والحلول الذكية. أؤمن بأن البرمجيات يجب أن تكون أداة لتمكين الإنسان وتسهيل حياته.</p>
+                <div style="display: flex; gap: 20px;">
+                    <div><span id="totalApps" style="color: var(--gold); font-weight: 800;">0</span> <span style="color: var(--text-dim);">تطبيق</span></div>
+                    <div><span id="totalDl" style="color: var(--gold); font-weight: 800;">0</span> <span style="color: var(--text-dim);">تحميل</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Follow Mopota -->
+    <div class="section-container">
+        <h2 class="section-title"><i class="fas fa-share-nodes"></i> تابع Mopota</h2>
+        <div class="social-grid">
+            <a href="https://t.me/mohamed_taha_07" target="_blank" rel="noopener" class="social-card">
+                <i class="fab fa-telegram"></i>
+                <span>Telegram</span>
+            </a>
+            <a href="https://www.facebook.com/mohamed.pota.07" target="_blank" rel="noopener" class="social-card">
+                <i class="fab fa-facebook"></i>
+                <span>Facebook</span>
+            </a>
+            <a href="https://www.instagram.com/mohamed_taha_07" target="_blank" rel="noopener" class="social-card">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram</span>
+            </a>
+            <a href="https://www.linkedin.com/in/mohamed-taha-79040a2a9" target="_blank" rel="noopener" class="social-card">
+                <i class="fab fa-linkedin"></i>
+                <span>LinkedIn</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Config (Replace with your actual config)
+        const firebaseConfig = {
+            databaseURL: "https://h-store-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        class HStore {
+            constructor() {
+                this.apps = [];
+                this.init();
+            }
+
+            async init() {
+                try {
+                    const res = await fetch('data/apps-manifest.json');
+                    this.apps = await res.json();
+
+                    this.renderLatest();
+                    this.loadStats();
+                } catch (e) {
+                    console.error("Manifest fail", e);
+                }
+            }
+
+            renderLatest() {
+                const grid = document.getElementById('latestGrid');
+                grid.innerHTML = this.apps.map(app => this.createCard(app)).join('');
+                document.getElementById('totalApps').textContent = this.apps.length;
+            }
+
+            createCard(app) {
+                return `
+                    <a href="app.html?id=${app.id}" class="app-card">
+                        ${app.featured ? '<span class="badge">مميز</span>' : ''}
+                        <img src="${app.icon || 'assets/default-icon.png'}" class="card-icon" onerror="this.src='assets/default-icon.png'">
+                        <div class="card-name">${app.name}</div>
+                        <div class="card-desc">${app.shortDescription || ''}</div>
+                        <div class="card-stats">
+                            <span><i class="fas fa-star"></i> ${app.rating || 5}</span>
+                            <span id="dl-${app.id}"><i class="fas fa-download"></i> --</span>
+                        </div>
+                    </a>
+                `;
+            }
+
+            async loadStats() {
+                db.ref('apps').on('value', snapshot => {
+                    const data = snapshot.val() || {};
+                    let total = 0;
+
+                    this.apps.forEach(app => {
+                        const count = data[app.id]?.downloads || 0;
+                        total += count;
+                        const el = document.getElementById(`dl-${app.id}`);
+                        if (el) el.innerHTML = `<i class="fas fa-download"></i> ${count}`;
+                    });
+
+                    document.getElementById('totalDl').textContent = total.toLocaleString();
+                    this.renderTrending(data);
+                });
+            }
+
+            renderTrending(stats) {
+                const trendingApps = [...this.apps]
+                    .sort((a, b) => (stats[b.id]?.downloads || 0) - (stats[a.id]?.downloads || 0))
+                    .slice(0, 3);
+
+                const grid = document.getElementById('trendingGrid');
+                grid.innerHTML = trendingApps.map(app => this.createCard(app)).join('');
+                document.getElementById('trendingSection').style.display = 'block';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => new HStore());
+    </script>
+</body>
+</html>
