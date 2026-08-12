@@ -32,6 +32,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     final locale = context.watch<LocaleCubit>().state.languageCode;
     final project = ProjectRepository.getProjectById(widget.projectId) ?? Project(
         id: 'not-found',
+        images: project.images, 
         titles: {'en': 'Project Not Found'},
         categories: {'en': ''},
         descriptions: {'en': ''},
