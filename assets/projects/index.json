@@ -1,0 +1,101 @@
+[
+  {
+    "id": "hisn-al-muslim",
+    "title": {
+      "en": "Hisn Al Muslim (حصن المسلم)",
+      "ar": "حصن المسلم",
+      "es": "Hisn Al Muslim",
+      "fr": "Hisn Al Muslim",
+      "de": "Hisn Al Muslim",
+      "zh": "حصن المسلم (穆斯林的堡垒)",
+      "ja": "Hisn Al Muslim (ムスリムの要塞)"
+    },
+    "category": {
+      "en": "Islamic Utility",
+      "ar": "تطبيق إسلامي",
+      "es": "Utilidad Islámica",
+      "fr": "Utilitaire Islamique",
+      "de": "Islamisches Tool",
+      "zh": "伊斯兰工具",
+      "ja": "イスラム教ユーティリティ"
+    },
+    "folder": "hisn_al_muslim",
+    "description": {
+      "en": "A production-grade Islamic product focusing on offline experience, native scheduling, and adaptive Material 3 UI.",
+      "ar": "منتج إسلامي بمستوى إنتاجي يركز على التجربة بدون إنترنت، والجدولة الأصلية، وواجهة Material 3 التكيفية.",
+      "es": "Un producto islámico de grado de producción centrado en la experiencia offline, programación nativa y UI adaptativa de Material 3.",
+      "fr": "Un produit islamique de qualité production axé sur l'expérience hors ligne, la planification native et l'interface Material 3 adaptative.",
+      "de": "Ein islamisches Produkt auf Produktionsniveau mit Fokus auf Offline-Erfahrung, nativer Zeitplanung und adaptiver Material 3 UI.",
+      "zh": "一款专注于离线体验、原生调度和自适应 Material 3 UI 的生产级伊斯兰产品。",
+      "ja": "オフライン体験、ネイティブスケジューリング、アダプティブなMaterial 3 UIに焦点を当てた本番環境レベルのイスラム教製品。"
+    },
+    "tags": ["Flutter", "Kotlin", "Material 3", "Bloc", "SQLite"],
+    "links": {
+      "GitHub Pages": "https://mopota.github.io/HisnAlMuslimApp/"
+    }
+  },
+  {
+    "id": "astraplay",
+    "title": {
+      "en": "AstraPlay",
+      "ar": "أسترا بلاي",
+      "es": "AstraPlay",
+      "fr": "AstraPlay",
+      "de": "AstraPlay",
+      "zh": "AstraPlay",
+      "ja": "AstraPlay"
+    },
+    "category": {
+      "en": "Media & Streaming",
+      "ar": "الوسائط والبث",
+      "es": "Medios y Streaming",
+      "fr": "Médias et Streaming",
+      "de": "Medien & Streaming",
+      "zh": "媒体与流媒体",
+      "ja": "メディアとストリーミング"
+    },
+    "folder": "astraplay",
+    "description": {
+      "en": "A high-performance IPTV & Media Player platform integrating Media3/ExoPlayer with a Clean Architecture foundation.",
+      "ar": "منصة IPTV ومشغل وسائط عالية الأداء تدمج Media3/ExoPlayer مع أساس Clean Architecture.",
+      "es": "Una plataforma de IPTV y reproductor de medios de alto rendimiento que integra Media3/ExoPlayer con una base de Clean Architecture.",
+      "fr": "Une plateforme IPTV et lecteur multimédia haute performance intégrant Media3/ExoPlayer avec une base Clean Architecture.",
+      "de": "Eine leistungsstarke IPTV- und Media-Player-Plattform, die Media3/ExoPlayer mit einer Clean Architecture-Basis integriert.",
+      "zh": "一个高性能的 IPTV 和媒体播放器平台，基于 Clean Architecture 架构集成 Media3/ExoPlayer。",
+      "ja": "Clean Architectureを基盤にMedia3/ExoPlayerを統合した高性能IPTVおよびメディアプレーヤー・プラットフォーム。"
+    },
+    "tags": ["Flutter", "Media3", "Clean Architecture", "Isar", "Dio"]
+  },
+  {
+    "id": "stockify",
+    "title": {
+      "en": "Stockify",
+      "ar": "ستوكيفاي",
+      "es": "Stockify",
+      "fr": "Stockify",
+      "de": "Stockify",
+      "zh": "Stockify",
+      "ja": "Stockify"
+    },
+    "category": {
+      "en": "E-Commerce",
+      "ar": "تجارة إلكترونية",
+      "es": "Comercio Electrónico",
+      "fr": "E-Commerce",
+      "de": "E-Commerce",
+      "zh": "电子商务",
+      "ja": "電子商取引"
+    },
+    "folder": "stockify",
+    "description": {
+      "en": "A robust E-commerce solution featuring Firebase integration, Stripe payments, and complex inventory management.",
+      "ar": "حل تجارة إلكترونية قوي يتميز بتكامل Firebase ومدفوعات Stripe وإدارة المخزون المعقدة.",
+      "es": "Una robusta solución de comercio electrónico con integración de Firebase, pagos con Stripe y gestión de inventario compleja.",
+      "fr": "Une solution e-commerce robuste comprenant l'intégration Firebase, les paiements Stripe et une gestion de stock complexe.",
+      "de": "Eine robuste E-Commerce-Lösung mit Firebase-Integration, Stripe-Zahlungen und komplexer Bestandsverwaltung.",
+      "zh": "一个强大的电子商务解决方案，具有 Firebase 集成、Stripe 支付和复杂的库存管理功能。",
+      "ja": "Firebase統合、Stripe決済、複雑な在庫管理を特徴とする堅牢なEコマースソリューション。"
+    },
+    "tags": ["Flutter", "Firebase", "Stripe", "Firestore"]
+  }
+]

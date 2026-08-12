@@ -1,0 +1,10 @@
+- Real-time Product Catalog
+- Inventory Tracking & Management
+- Secure Payment Processing (Stripe)
+- User Authentication (Firebase Auth)
+- Product Search & Categories
+- Transaction History
+- Stock Race-condition protection
+- Graceful UI state handling (Error/Empty/Loading)
+- Mobile-first responsive design
+- Firestore Security hardened

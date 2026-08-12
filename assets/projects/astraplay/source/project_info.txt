@@ -1,0 +1,19 @@
+Project: AstraPlay
+Category: IPTV / Streaming / Media Player
+Platform: Flutter, Android Native (Kotlin)
+Status: 85% Functional
+Architecture: Clean Architecture
+UI Engine: Flutter
+Media Engine: Media3 / ExoPlayer (Kotlin)
+Primary Features: Live TV, VOD, Series, M3U, Xtream Codes
+Data Sources: M3U files, Xtream APIs, Direct Stream URLs
+Local Storage: Isar Database
+Networking: Dio
+Dependency Injection: GetIt
+Routing: GoRouter
+State Management: flutter_bloc
+Playback Tech: Hardware-accelerated, PiP, DRM, Subtitles
+Sync Logic: Streaming Parsing + Incremental Sync
+Environment: Flutter 3.44.6, Dart 3.12.2
+NDK: v29.0.14206865
+AGP: 8.11.1

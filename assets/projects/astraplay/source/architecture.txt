@@ -1,0 +1,33 @@
+Architecture: Clean Architecture
+- Presentation Layer: Flutter, flutter_bloc, go_router
+- Domain Layer: Repositories (Interfaces), Entities, Use Cases
+- Data Layer: Isar (Local Storage), Dio (Network), Repository Implementations
+- Native Layer: Custom PlatformView (Android Native Kotlin), Media3/ExoPlayer
+Flutter-Native Bridge: MethodChannel
+Data Models (Isar):
+- StreamCategory
+- Playlist
+- AppStream
+- EpgProgram
+- HistoryRecord
+- AppSettings
+- SearchHistory
+Performance Optimization:
+- Streaming M3U Parser (Line-by-line vs Split)
+- Incremental Sync in PlaylistRepositoryImpl
+- Composite Indices in Isar
+- Hardware-accelerated playback
+Networking Timings:
+- Xtream Login: 200–500ms
+- Category Fetch: 300–800ms
+- Full Stream List (Large): 3–7s
+Known Gaps:
+- Settings synchronization
+- Stalker module
+- Parental Control module
+- Chromecast integration (partial)
+- PiP/DRM/Subtitles/Casting support
+Build Environment:
+- Dart SDK ^3.12.2
+- Flutter stable 3.44.6
+- Android NDK mismatch resolution (v29 used)

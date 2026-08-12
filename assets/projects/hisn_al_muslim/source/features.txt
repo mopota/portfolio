@@ -1,0 +1,14 @@
+- Holy Quran (Mushaf & Reader)
+- Audio Recitation (Per-Ayah lightweight, Full-Surah media session)
+- Adhkar & Supplications
+- Prayer Times (Method 8 calculation)
+- Adhan Scheduling (Native Android AlarmManager)
+- Qibla Finder (flutter_qiblah v3.2.0)
+- Tasbih (Electronic Misbaha)
+- Temporal UX (Next Prayer Hero Card, Time-based theme)
+- Ayah-view radial menu
+- 5-Step Smart Onboarding
+- Offline-first (Quran JSON download)
+- Settings Hub (Adhan vs Auto-Azkar configuration)
+- Multi-language support
+- Bookmarks & State saving

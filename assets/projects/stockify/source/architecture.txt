@@ -1,0 +1,19 @@
+Architecture: Flutter + Firebase Cloud Architecture
+Data Layer: Firebase Firestore (Real-time NoSQL)
+Auth: Firebase Authentication
+Business Logic:
+- Client-side stock validation
+- Cloud Functions for secure transaction finalization
+Stripe Integration:
+- Native Stripe SDK integration
+- Lifecycle handling (PaymentIntent, Confirmation)
+- Debugging: MissingPluginException resolution
+Security Rules:
+- Granular read/write rules for User Profiles
+- Restricted access to Transaction History
+- Validated writes for Stock updates
+Debugging Experience:
+- Product Image fallback logic
+- Inventory race condition handling
+- Native payment plugin troubleshooting
+- Firestore rule auditing

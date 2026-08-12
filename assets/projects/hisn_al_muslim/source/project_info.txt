@@ -1,0 +1,15 @@
+Project: Hisn Al Muslim (Hesn Al Muslim)
+Version: v3.1.0
+Category: Islamic Utility / Product
+Platform: Flutter, Android Native
+Status: Production Ready / Release Hardened
+Release File: Hisn.Al.Muslim.v3.1.0.apk
+Live Link: https://mopota.github.io/HisnAlMuslimApp/
+Primary Language: Arabic/English
+Font: Cairo
+Theme: Noor M3 (Material 3)
+Splash Screen: Adaptive (Dark: Black, Light: White)
+Onboarding: 5-Step (Location, Privacy, Permissions, Name, Profile)
+Prayer Calculation: Method 8 (AlAdhan API)
+Time Format: 12-hour, Arabic numbers
+Audio Provider: Quran Cloud (Reciter: Mishary Alafasy)

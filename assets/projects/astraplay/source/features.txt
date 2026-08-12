@@ -1,0 +1,20 @@
+- M3U Playlist Support
+- Xtream Codes Integration
+- Direct Stream Playback
+- Live TV / VOD / Series
+- Seasons & Episodes Navigation
+- Picture-in-Picture (PiP) Mode
+- Subtitle Downloader & Support
+- Electronic Program Guide (EPG)
+- Playback History & Search History
+- Advanced Player Controls:
+  - Swipe gestures (Volume/Brightness/Seek)
+  - Playback Speed adjustment
+  - Audio track switching
+  - 10s Forward/Rewind
+  - Fit modes & Screen rotation
+- Clean Architecture (Scalable)
+- Fast local storage with Isar
+- Subtitle support and track selection
+- Hardware-accelerated streaming
+- Global Search

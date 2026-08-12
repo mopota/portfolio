@@ -1,0 +1,11 @@
+Project: Stockify
+Category: E-Commerce
+Platform: Flutter, Firebase
+Status: Production-ready prototype
+Core Concept: Commercial app with real-time stock and payments
+Backend: Google Firebase
+Payment Provider: Stripe
+Data Sync: Real-time via Firestore
+Security: Firestore Rules + Cloud Functions
+Inventory Management: Real-time stock tracking
+UI: Material 3 oriented

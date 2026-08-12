@@ -1,0 +1,26 @@
+Architecture: Bloc / Cubit (flutter_bloc)
+Architecture Score: 88/100
+State Management: Cubit
+Data Layer: Repository Pattern
+Local Storage: sqflite (v2.4.3), SharedPreferences (v2.5.5)
+Networking: Dio (v5.9.2)
+Native Integration:
+- AdhanWindowScheduler.kt (Kotlin)
+- AdhanPlugin.kt (MethodChannel)
+- DailyAdhanWorker.kt (WorkManager)
+- AlarmManager for precise Adhan
+Scheduling Logic: Sliding Window (7 days)
+Notifications: flutter_local_notifications (v22.0.0)
+Permission Handling: permission_handler (v12.0.3)
+Release Hardening:
+- Exact Alarm Policy
+- Foreground Service descriptions
+- Minification enabled
+- Minified App Size: 70–90 MB
+- Debug signing replaced with Release signing
+Environment:
+- Flutter 3.44.2
+- Dart 3.12.2
+- CompileSdk 36, TargetSdk 36
+- AGP 8.11.1, Gradle 8.13
+- OpenJDK 21
