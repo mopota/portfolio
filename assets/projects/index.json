@@ -1,6 +1,18 @@
 [
   {
     "id": "hisn-al-muslim",
+    "images": {
+  "hero": "hero.png",
+  "logo": "logo.png",
+  "screenshots": [
+    "screenshot_01.jpg",
+    "screenshot_02.jpg",
+    "screenshot_03.jpg",
+    "screenshot_04.jpg",
+    "screenshot_05.jpg",
+    "screenshot_06.jpg"
+  ]
+},
     "title": {
       "en": "Hisn Al Muslim (حصن المسلم)",
       "ar": "حصن المسلم",
@@ -36,6 +48,18 @@
   },
   {
     "id": "astraplay",
+    "images": {
+  "hero": "hero.png",
+  "logo": "logo.png",
+  "screenshots": [
+    "screenshot_01.jpg",
+    "screenshot_02.jpg",
+    "screenshot_03.jpg",
+    "screenshot_04.jpg",
+    "screenshot_05.jpg",
+    "screenshot_06.jpg"
+  ]
+}
     "title": {
       "en": "AstraPlay",
       "ar": "أسترا بلاي",
@@ -49,7 +73,7 @@
       "en": "Media & Streaming",
       "ar": "الوسائط والبث",
       "es": "Medios y Streaming",
-      "fr": "Médias et Streaming",
+      "fr": "Mé,dias et Streaming",
       "de": "Medien & Streaming",
       "zh": "媒体与流媒体",
       "ja": "メディアとストリーミング"
@@ -68,6 +92,18 @@
   },
   {
     "id": "stockify",
+    "images": {
+  "hero": "hero.png",
+  "logo": "logo.png",
+  "screenshots": [
+    "screenshot_01.jpg",
+    "screenshot_02.jpg",
+    "screenshot_03.jpg",
+    "screenshot_04.jpg",
+    "screenshot_05.jpg",
+    "screenshot_06.jpg"
+  ]
+    },
     "title": {
       "en": "Stockify",
       "ar": "ستوكيفاي",
