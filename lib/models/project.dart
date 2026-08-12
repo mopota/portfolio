@@ -7,6 +7,7 @@ class Project {
   final Map<String, String> contents;
   final List<String> tags;
   final Map<String, String> links;
+  final ProjectImages images;
 
   const Project({
     required this.id,
@@ -16,12 +17,9 @@ class Project {
     required this.folder,
     required this.contents,
     required this.tags,
+    required this.images,
     this.links = const {},
   });
-
-  // ---------------------------------------------------------------------------
-  // Localized content
-  // ---------------------------------------------------------------------------
 
   String getTitle(String locale) {
     return titles[locale] ??
@@ -51,60 +49,19 @@ class Project {
         '';
   }
 
-  // ---------------------------------------------------------------------------
-  // Project asset paths
-  // ---------------------------------------------------------------------------
-
-  /// Root directory of this project's assets.
-  ///
-  /// Example:
-  /// assets/projects/hisn_al_muslim/
   String get assetRoot => 'assets/projects/$folder';
 
-  /// Project images directory.
-  ///
-  /// Example:
-  /// assets/projects/hisn_al_muslim/images/
   String get imagesRoot => '$assetRoot/images';
 
-  /// Main project hero image.
-  ///
-  /// The actual project structure uses PNG for hero images.
-  String get heroImage => '$imagesRoot/hero.png';
+  String get heroImage => '$imagesRoot/${images.hero}';
 
-  /// Project logo.
-  ///
-  /// The actual project structure uses PNG for logos.
-  String get logoImage => '$imagesRoot/logo.png';
+  String get logoImage => '$imagesRoot/${images.logo}';
 
-  /// Available project screenshots.
-  ///
-  /// Screenshots use JPG in the current project structure.
-  ///
-  /// The list is intentionally generated from the standard naming convention.
-  /// The UI should gracefully handle a missing optional image.
   List<String> get screenshotImages {
-    return List<String>.generate(
-      20,
-      (index) {
-        final number = (index + 1).toString().padLeft(2, '0');
-        return '$imagesRoot/screenshot_$number.jpg';
-      },
-    );
+    return images.screenshots
+        .map((image) => '$imagesRoot/$image')
+        .toList(growable: false);
   }
-
-  /// Returns all known project images.
-  List<String> get allImages {
-    return <String>[
-      heroImage,
-      logoImage,
-      ...screenshotImages,
-    ];
-  }
-
-  // ---------------------------------------------------------------------------
-  // JSON
-  // ---------------------------------------------------------------------------
 
   factory Project.fromJson(
     Map<String, dynamic> json,
@@ -119,12 +76,9 @@ class Project {
       contents: Map<String, String>.unmodifiable(contents),
       tags: _stringList(json['tags']),
       links: _stringMap(json['links']),
+      images: ProjectImages.fromJson(json['images']),
     );
   }
-
-  // ---------------------------------------------------------------------------
-  // JSON helpers
-  // ---------------------------------------------------------------------------
 
   static String _stringValue(dynamic value) {
     if (value is String && value.trim().isNotEmpty) {
@@ -136,14 +90,14 @@ class Project {
 
   static Map<String, String> _localizedMap(dynamic value) {
     if (value is! Map) {
-      return const <String, String>{};
+      return const {};
     }
 
-    final Map<String, String> result = <String, String>{};
+    final result = <String, String>{};
 
     value.forEach((key, value) {
       if (key is String && value is String) {
-        final String text = value.trim();
+        final text = value.trim();
 
         if (text.isNotEmpty) {
           result[key] = text;
@@ -151,15 +105,15 @@ class Project {
       }
     });
 
-    return Map<String, String>.unmodifiable(result);
+    return Map.unmodifiable(result);
   }
 
   static List<String> _stringList(dynamic value) {
     if (value is! List) {
-      return const <String>[];
+      return const [];
     }
 
-    return List<String>.unmodifiable(
+    return List.unmodifiable(
       value
           .whereType<String>()
           .map((item) => item.trim())
@@ -169,14 +123,14 @@ class Project {
 
   static Map<String, String> _stringMap(dynamic value) {
     if (value is! Map) {
-      return const <String, String>{};
+      return const {};
     }
 
-    final Map<String, String> result = <String, String>{};
+    final result = <String, String>{};
 
     value.forEach((key, value) {
       if (key is String && value is String) {
-        final String text = value.trim();
+        final text = value.trim();
 
         if (text.isNotEmpty) {
           result[key] = text;
@@ -184,17 +138,59 @@ class Project {
       }
     });
 
-    return Map<String, String>.unmodifiable(result);
+    return Map.unmodifiable(result);
   }
 }
 
-/// Small extension used by Project localized getters.
-extension FirstOrNullExtension<T> on Iterable<T> {
-  T? get firstOrNull {
-    if (isEmpty) {
-      return null;
+class ProjectImages {
+  final String hero;
+  final String logo;
+  final List<String> screenshots;
+
+  const ProjectImages({
+    required this.hero,
+    required this.logo,
+    required this.screenshots,
+  });
+
+  factory ProjectImages.fromJson(dynamic json) {
+    if (json is! Map) {
+      return const ProjectImages(
+        hero: 'hero.png',
+        logo: 'logo.png',
+        screenshots: [],
+      );
     }
 
-    return first;
+    return ProjectImages(
+      hero: _readString(json['hero'], 'hero.png'),
+      logo: _readString(json['logo'], 'logo.png'),
+      screenshots: _readList(json['screenshots']),
+    );
   }
+
+  static String _readString(dynamic value, String fallback) {
+    if (value is String && value.trim().isNotEmpty) {
+      return value.trim();
+    }
+
+    return fallback;
+  }
+
+  static List<String> _readList(dynamic value) {
+    if (value is! List) {
+      return const [];
+    }
+
+    return List.unmodifiable(
+      value
+          .whereType<String>()
+          .map((item) => item.trim())
+          .where((item) => item.isNotEmpty),
+    );
+  }
+}
+
+extension FirstOrNullExtension<T> on Iterable<T> {
+  T? get firstOrNull => isEmpty ? null : first;
 }
