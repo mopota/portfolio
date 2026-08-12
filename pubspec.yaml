@@ -67,8 +67,20 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  flutter:
+  uses-material-design: true
+
   assets:
-    - assets/projects/
+    - assets/projects/index.json
+    - assets/projects/hisn_al_muslim/
+    - assets/projects/hisn_al_muslim/images/
+    - assets/projects/hisn_al_muslim/source/
+    - assets/projects/stockify/
+    - assets/projects/stockify/images/
+    - assets/projects/stockify/source/
+    - assets/projects/astraplay/
+    - assets/projects/astraplay/images/
+    - assets/projects/astraplay/source/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
