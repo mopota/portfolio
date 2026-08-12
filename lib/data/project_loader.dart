@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../models/project.dart';
 
@@ -43,7 +44,7 @@ class ProjectLoader {
       
       return projects;
     } catch (e) {
-      print('CRITICAL: Error loading projects index: $e');
+      debugPrint (': Error loading projects index: $e');
       return [];
     }
   }
