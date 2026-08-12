@@ -11,15 +11,6 @@ class ProjectLoader {
   static const String _projectsRoot = 'assets/projects';
   static const String _indexPath = '$_projectsRoot/index.json';
 
-  /// Languages supported by the portfolio.
-  ///
-  /// English is always loaded from:
-  /// project.md
-  ///
-  /// Other languages use:
-  /// project_ar.md
-  /// project_es.md
-  /// etc.
   static const List<String> _supportedLanguages = <String>[
     'en',
     'ar',
@@ -30,28 +21,16 @@ class ProjectLoader {
     'ja',
   ];
 
-  /// Loads all portfolio projects from the external project assets.
-  ///
-  /// Data flow:
-  ///
-  /// index.json
-  ///     ↓
-  /// project metadata
-  ///     ↓
-  /// project.md / project_<language>.md
-  ///     ↓
-  /// Project.fromJson
-  ///     ↓
-  /// List<Project>
   static Future<List<Project>> loadProjects() async {
     try {
-      final String indexContent = await rootBundle.loadString(_indexPath);
+      final String indexContent =
+          await rootBundle.loadString(_indexPath);
 
       final dynamic decoded = jsonDecode(indexContent);
 
       if (decoded is! List) {
         debugPrint(
-          '[ProjectLoader] Invalid index.json: expected a JSON array.',
+          '[ProjectLoader] index.json must contain a JSON array.',
         );
         return const <Project>[];
       }
@@ -61,7 +40,7 @@ class ProjectLoader {
       for (final dynamic rawItem in decoded) {
         if (rawItem is! Map) {
           debugPrint(
-            '[ProjectLoader] Skipping invalid project entry: $rawItem',
+            '[ProjectLoader] Skipping invalid project entry.',
           );
           continue;
         }
@@ -69,27 +48,20 @@ class ProjectLoader {
         final Map<String, dynamic> item =
             Map<String, dynamic>.from(rawItem);
 
-        final String? folder = _readString(item['folder']);
+        final dynamic folderValue = item['folder'];
 
-        if (folder == null || folder.isEmpty) {
+        if (folderValue is! String ||
+            folderValue.trim().isEmpty) {
           debugPrint(
             '[ProjectLoader] Skipping project without a valid folder.',
           );
           continue;
         }
 
+        final String folder = folderValue.trim();
+
         final Map<String, String> contents =
             await _loadProjectContents(folder);
-
-        final String englishContent =
-            contents['en']?.trim() ?? '';
-
-        if (englishContent.isEmpty) {
-          debugPrint(
-            '[ProjectLoader] Warning: English content is empty for '
-            'project "$folder".',
-          );
-        }
 
         try {
           final Project project = Project.fromJson(
@@ -98,9 +70,9 @@ class ProjectLoader {
           );
 
           projects.add(project);
-        } catch (e, stackTrace) {
+        } catch (error, stackTrace) {
           debugPrint(
-            '[ProjectLoader] Failed to create Project for "$folder": $e',
+            '[ProjectLoader] Failed to parse project "$folder": $error',
           );
           debugPrintStack(stackTrace: stackTrace);
         }
@@ -111,98 +83,73 @@ class ProjectLoader {
       );
 
       return List<Project>.unmodifiable(projects);
-    } on FlutterError catch (e, stackTrace) {
+    } on FlutterError catch (error, stackTrace) {
       debugPrint(
-        '[ProjectLoader] Flutter asset error while loading index: $e',
+        '[ProjectLoader] Asset loading error: $error',
       );
       debugPrintStack(stackTrace: stackTrace);
       return const <Project>[];
-    } on FormatException catch (e, stackTrace) {
+    } on FormatException catch (error, stackTrace) {
       debugPrint(
-        '[ProjectLoader] Invalid JSON in $_indexPath: $e',
+        '[ProjectLoader] Invalid JSON in $_indexPath: $error',
       );
       debugPrintStack(stackTrace: stackTrace);
       return const <Project>[];
-    } catch (e, stackTrace) {
+    } catch (error, stackTrace) {
       debugPrint(
-        '[ProjectLoader] Unexpected error while loading projects: $e',
+        '[ProjectLoader] Unexpected loading error: $error',
       );
       debugPrintStack(stackTrace: stackTrace);
       return const <Project>[];
     }
   }
 
-  /// Loads all available Markdown content for a single project.
-  ///
-  /// English:
-  ///   project.md
-  ///
-  /// Arabic:
-  ///   project_ar.md
-  ///
-  /// Other languages:
-  ///   project_<language>.md
-  ///
-  /// If a translated file does not exist, English is used as fallback.
   static Future<Map<String, String>> _loadProjectContents(
     String folder,
   ) async {
     final Map<String, String> contents = <String, String>{};
 
-    // English is the primary source and MUST be loaded first.
-    final String? englishContent = await _loadMarkdown(
+    final String? english = await _loadMarkdown(
       folder: folder,
       language: 'en',
     );
 
-    if (englishContent != null && englishContent.trim().isNotEmpty) {
-      contents['en'] = englishContent;
+    if (english != null && english.trim().isNotEmpty) {
+      contents['en'] = english;
     } else {
       debugPrint(
-        '[ProjectLoader] Missing English content: '
-        '$_projectsRoot/$folder/project.md',
+        '[ProjectLoader] Missing English content for "$folder".',
       );
 
-      // Keep an empty value instead of fake content.
       contents['en'] = '';
     }
 
-    // Load translated content.
     for (final String language in _supportedLanguages) {
       if (language == 'en') {
         continue;
       }
 
-      final String? translatedContent = await _loadMarkdown(
+      final String? translated = await _loadMarkdown(
         folder: folder,
         language: language,
       );
 
-      if (translatedContent != null &&
-          translatedContent.trim().isNotEmpty) {
-        contents[language] = translatedContent;
+      if (translated != null && translated.trim().isNotEmpty) {
+        contents[language] = translated;
       } else {
-        // Fallback to English.
         contents[language] = contents['en'] ?? '';
-
-        debugPrint(
-          '[ProjectLoader] Translation "$language" not found for '
-          '"$folder". Falling back to English.',
-        );
       }
     }
 
-    return contents;
+    return Map<String, String>.unmodifiable(contents);
   }
 
-  /// Loads one Markdown file.
-  ///
-  /// Returns null when the file does not exist.
   static Future<String?> _loadMarkdown({
     required String folder,
     required String language,
   }) async {
-    final String suffix = language == 'en' ? '' : '_$language';
+    final String suffix =
+        language == 'en' ? '' : '_$language';
 
     final String path =
         '$_projectsRoot/$folder/project$suffix.md';
@@ -211,37 +158,11 @@ class ProjectLoader {
       return await rootBundle.loadString(path);
     } on FlutterError {
       return null;
-    } catch (e) {
+    } catch (error) {
       debugPrint(
-        '[ProjectLoader] Failed to read "$path": $e',
+        '[ProjectLoader] Failed to read "$path": $error',
       );
       return null;
-    }
-  }
-
-  static String? _readString(dynamic value) {
-    if (value is String) {
-      final String result = value.trim();
-
-      if (result.isNotEmpty) {
-        return result;
-      }
-    }
-
-    return null;
-  }
-}               }
-            }
-          }
-        }
-        
-        projects.add(Project.fromJson(item, contents));
-      }
-      
-      return projects;
-    } catch (e) {
-      debugPrint (': Error loading projects index: $e');
-      return [];
     }
   }
 }
