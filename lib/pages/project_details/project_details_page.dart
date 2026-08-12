@@ -72,11 +72,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           ),
         );
 
-    final ColorScheme colorScheme =
-        Theme.of(context).colorScheme;
-
-    final TextTheme textTheme =
-        Theme.of(context).textTheme;
+    
 
     final bool isArabic = locale == 'ar';
 
